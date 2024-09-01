@@ -6,6 +6,13 @@ CREATE TABLE IF NOT EXISTS cenas (
     descricao TEXT
 );
 
+CREATE TABLE IF NOT EXISTS progresso_do_jogador (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome_jogador VARCHAR(255) NOT NULL,
+    id_cena_atual INT,
+    FOREIGN KEY (id_cena_atual) REFERENCES cenas(id)
+);
+
 CREATE TABLE IF NOT EXISTS itens_da_cena (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_cena_atual INT,
@@ -22,15 +29,10 @@ CREATE TABLE IF NOT EXISTS itens_da_cena (
 CREATE TABLE IF NOT EXISTS itens_de_inventario (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome_jogador VARCHAR(255),
-    nome VARCHAR(100) NOT NULL,
-    descricao TEXT
-);
-
-CREATE TABLE IF NOT EXISTS progresso_do_jogador (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome_jogador VARCHAR(255) NOT NULL,
-    id_cena_atual INT,
-    FOREIGN KEY (id_cena_atual) REFERENCES cenas(id)
+    nome VARCHAR(255) NOT NULL,
+    descricao TEXT,
+    id_jogador INT,
+    FOREIGN KEY (id_jogador) REFERENCES progresso_do_jogador(id)
 );
 
 CREATE TABLE IF NOT EXISTS comandos (
