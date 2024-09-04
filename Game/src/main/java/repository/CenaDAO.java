@@ -1,7 +1,6 @@
-package repository;
+package main.java.repository;
 
-import com.mysql.cj.MysqlConnection;
-import model.Cena;
+import main.java.model.Cena;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,23 +9,20 @@ import java.sql.SQLException;
 
 public class CenaDAO {
     public static Cena findCenaById(Integer id) throws SQLException {
-        
+        Connection conn = Mysql.getConnection();
         String sql = "SELECT * FROM cenas WHERE id = ?";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setInt(1, id);
+        ResultSet rs = stmt.executeQuery();
         Cena cena = new Cena();
-        
-        try (Connection conn = Mysql.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, id);
-            
-            try (ResultSet rs = stmt.executeQuery()) {
-
-                if(rs.next()) {
-                    cena.setIdCena(rs.getInt("id"));
-                    cena.setDescricao(rs.getString("descricao"));
+        if(rs.next()) {
+            cena.setIdCena(
+                            rs.getInt("id_cena")
+                    );
+                    cena.setDescricao((rs.getString("descricao")));
                 }
-            }
-        }
-        return cena;    
+        return cena;
     }
 }
+

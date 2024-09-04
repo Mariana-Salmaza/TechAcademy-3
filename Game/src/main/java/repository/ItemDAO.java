@@ -1,6 +1,6 @@
-package repository;
+package main.java.repository;
 
-import model.Item;
+import main.java.model.Item;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

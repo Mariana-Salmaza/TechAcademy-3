@@ -1,4 +1,4 @@
-package model;
+package main.java.model;
 
 public class Item {
     private Integer idItem;
@@ -10,13 +10,20 @@ public class Item {
 
     private Cena cenaDestino;
 
-
     public Integer getIdItem() {
         return idItem;
     }
 
     public void setIdItem(Integer idItem) {
         this.idItem = idItem;
+    }
+
+    public Cena getCenaAtual() {
+        return cenaAtual;
+    }
+
+    public void setCenaAtual(Cena cenaAtual) {
+        this.cenaAtual = cenaAtual;
     }
 
     public String getNome() {
@@ -49,14 +56,6 @@ public class Item {
 
     public void setComandoCorreto(String comandoCorreto) {
         this.comandoCorreto = comandoCorreto;
-    }
-
-    public Cena getCenaAtual() {
-        return cenaAtual;
-    }
-
-    public void setCenaAtual(Cena cenaAtual) {
-        this.cenaAtual = cenaAtual;
     }
 
     public Cena getCenaDestino() {
