@@ -1,5 +1,4 @@
-CREATE DATABASE game;
-USE game;
+
 
 CREATE TABLE IF NOT EXISTS cenas (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -41,6 +40,14 @@ CREATE TABLE IF NOT EXISTS comandos (
     descricao TEXT NOT NULL
 );
 
+create table saves (
+	id_save int primary key auto_increment,
+	id_cena_atual int not null,
+	foreign key (id_cena_atual) references cenas(id)
+)
+
+
+
 INSERT INTO cenas (descricao) VALUES
 ('Você está na sala de entrada de um velho castelo. O lugar está empoeirado e mal iluminado. Há uma porta ao norte e uma escada que desce para o porão. No canto da sala, há uma LANTERNA e uma CHAVE DE FERRO em uma mesa antiga. Use a LANTERNA para explorar o escuro corredor ou a CHAVE DE FERRO para tentar abrir um baú trancado.'),
 ('O corredor está sombrio e o vento parece sussurrar segredos antigos. As paredes estão cobertas de tapeçarias rasgadas e há um odor de mofo no ar. Há portas a leste e a oeste. Um DIÁRIO DO CONDE está em uma mesa próxima, e um MAPA DO CASTELO está pendurado na parede. O DIÁRIO pode conter dicas para desvendar o enigma, e o MAPA pode revelar caminhos secretos.'),
@@ -71,6 +78,8 @@ INSERT INTO comandos (nome_comando, descricao) VALUES
 ('CARREGAR', 'Carrega um jogo salvo.'),
 ('REINICIAR', 'Reinicia o jogo.');
 
-SHOW TABLES;
 
-SELECT * FROM itens_da_cena WHERE id_cena_atual = 1;
+
+
+
+
