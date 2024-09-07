@@ -8,14 +8,14 @@ import java.sql.SQLException;
 
 public class CenaDAO {
 
-    public static Cena findCenaById(Integer id) throws SQLException {
+    public static Cena findCenaById(int id) throws SQLException {
         String sql = "SELECT * FROM cenas WHERE id = ?";
         Cena cena = null;
 
         try (Connection conn = Mysql.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, id);
+            stmt.setInt(1, id); 
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {

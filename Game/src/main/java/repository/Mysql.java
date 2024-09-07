@@ -25,6 +25,5 @@ public class Mysql {
             System.out.println("Erro ao tentar importar o driver mysql");
         }
         return null;
-
     }
 }

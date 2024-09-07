@@ -1,6 +1,9 @@
 package repository;
 
 import model.Inventario;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,9 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 public class InventarioDAO {
 
@@ -100,7 +100,7 @@ public class InventarioDAO {
         return jsonArray;
     }
 
-    public static Integer getIdSave() throws SQLException {
+    public static Integer getNextIdSave() throws SQLException {
         String sql = "SELECT COALESCE(MAX(id_save), 0) + 1 AS new_id_save FROM itens_inventario";
         try (Connection conn = Mysql.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
