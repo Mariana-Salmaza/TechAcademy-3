@@ -5,11 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Mysql {
-
     private static Connection connection;
 
     public static Connection getConnection() {
-
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(
@@ -20,7 +18,7 @@ public class Mysql {
             return connection;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            System.out.println("Erro ao tentar conectar com o banco");
+            System.out.println("Erro ao tentar connectar com o banco.");
         } catch (ClassNotFoundException e) {
             System.out.println("Erro ao tentar importar o driver mysql");
         }
