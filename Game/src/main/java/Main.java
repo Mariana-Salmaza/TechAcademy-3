@@ -1,34 +1,18 @@
-import com.google.gson.Gson;
-import model.Cena;
-import model.Save;
-import repository.CenaDAO;
-import repository.InventarioDAO;
+import controller.AntesDoJogoController;
+import service.ComandoHelp;
+import service.ComandoStart;
 import spark.Spark;
 
 public class Main {
-    private static final Gson GSON = new Gson();
-
     public static void main(String[] args) {
-        try {
-            Spark.port(4567);
 
-            
-            Spark.get("/", (req, res) -> {
-                res.type("application/json");
-                Integer idSave = InventarioDAO.getIdSave(); 
-                Save save = new Save(idSave);
-                return GSON.toJson(save);
-            });
+        ComandoHelp comandoHelp = new ComandoHelp();
+        ComandoStart comandoStart = new ComandoStart();
 
-            Spark.get("/cena/:id", (req, res) -> {
-                res.type("application/json");
-                Integer cenaId = Integer.parseInt(req.params(":id"));
-                Cena cena = CenaDAO.findCenaById(cenaId);
-                return GSON.toJson(cena);
-            });
+        AntesDoJogoController controller = new AntesDoJogoController(comandoHelp, comandoStart);
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        Spark.get("/:comando", controller);
+
+        Spark.port(4567);
     }
 }
