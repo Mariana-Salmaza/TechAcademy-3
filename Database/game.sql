@@ -1,4 +1,4 @@
-CREATE DATABASE game;
+CREATE DATABASE IF NOT EXISTS game;
 USE game;
 
 CREATE TABLE IF NOT EXISTS cenas (
@@ -17,13 +17,19 @@ CREATE TABLE IF NOT EXISTS itens_da_cena (
     FOREIGN KEY (id_cena) REFERENCES cenas(id)
 );
 
+CREATE TABLE IF NOT EXISTS save (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_jogador INT,
+    id_cena_atual INT,
+    FOREIGN KEY (id_cena_atual) REFERENCES cenas(id)
+);
+
 CREATE TABLE IF NOT EXISTS itens_inventario (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    id_save INT,
-    nome_jogador VARCHAR(255) NOT NULL,
     nome_item VARCHAR(255) NOT NULL,
     descricao TEXT
 );
+
 
 CREATE TABLE IF NOT EXISTS use_with (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -71,6 +77,3 @@ INSERT INTO comandos (nome_comando, descricao) VALUES
 ('RESTART', 'Reinicia o jogo.');
 
 SHOW TABLES;
-
-
-
