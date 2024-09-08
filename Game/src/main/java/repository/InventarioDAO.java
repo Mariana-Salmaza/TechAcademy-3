@@ -1,9 +1,6 @@
 package repository;
 
 import model.Inventario;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,15 +12,13 @@ import java.util.List;
 public class InventarioDAO {
 
     public static void insertInventario(Inventario inventario) throws SQLException {
-        String sql = "INSERT INTO itens_inventario (id_save, nome_jogador, nome_item, descricao) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO itens_inventario (nome_item, descricao) VALUES (?, ?)";
         
         try (Connection conn = Mysql.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, inventario.getIdSave());
-            stmt.setString(2, inventario.getNomeJogador());
-            stmt.setString(3, inventario.getNomeItem());
-            stmt.setString(4, inventario.getDescricao());
+            stmt.setString(1, inventario.getNomeItem());
+            stmt.setString(2, inventario.getDescricao());
             
             stmt.executeUpdate();
         }
@@ -42,8 +37,6 @@ public class InventarioDAO {
                 if (rs.next()) {
                     inventario = new Inventario();
                     inventario.setIdInventario(rs.getInt("id"));
-                    inventario.setIdSave(rs.getInt("id_save"));
-                    inventario.setNomeJogador(rs.getString("nome_jogador"));
                     inventario.setNomeItem(rs.getString("nome_item"));
                     inventario.setDescricao(rs.getString("descricao"));
                 }
@@ -51,22 +44,20 @@ public class InventarioDAO {
         }
         return inventario;
     }
-    
-    public static List<Inventario> findInventariosByNomeJogador(String nomeJogador) throws SQLException {
-        String sql = "SELECT * FROM itens_inventario WHERE nome_jogador = ?";
+
+    public static List<Inventario> findInventariosByNomeItem(String nomeItem) throws SQLException {
+        String sql = "SELECT * FROM itens_inventario WHERE nome_item = ?";
         List<Inventario> inventarios = new ArrayList<>();
         
         try (Connection conn = Mysql.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, nomeJogador);
+            stmt.setString(1, nomeItem);
             
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Inventario inventario = new Inventario();
                     inventario.setIdInventario(rs.getInt("id"));
-                    inventario.setIdSave(rs.getInt("id_save"));
-                    inventario.setNomeJogador(rs.getString("nome_jogador"));
                     inventario.setNomeItem(rs.getString("nome_item"));
                     inventario.setDescricao(rs.getString("descricao"));
                     inventarios.add(inventario);
@@ -76,40 +67,16 @@ public class InventarioDAO {
         return inventarios;
     }
 
-    public static JsonElement getItensByIdSave(Integer idSave) throws SQLException {
-        String sql = "SELECT * FROM itens_inventario WHERE id_save = ?";
-        JsonArray jsonArray = new JsonArray();
-        
-        try (Connection conn = Mysql.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, idSave);
-            
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("id", rs.getInt("id"));
-                    jsonObject.addProperty("id_save", rs.getInt("id_save"));
-                    jsonObject.addProperty("nome_jogador", rs.getString("nome_jogador"));
-                    jsonObject.addProperty("nome_item", rs.getString("nome_item"));
-                    jsonObject.addProperty("descricao", rs.getString("descricao"));
-                    jsonArray.add(jsonObject);
-                }
-            }
-        }
-        return jsonArray;
-    }
-
     public static Integer getNextIdSave() throws SQLException {
-        String sql = "SELECT COALESCE(MAX(id_save), 0) + 1 AS new_id_save FROM itens_inventario";
+        String sql = "SELECT COALESCE(MAX(id), 0) + 1 AS new_id FROM itens_inventario";
         try (Connection conn = Mysql.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
             if (rs.next()) {
-                return rs.getInt("new_id_save");
+                return rs.getInt("new_id");
             } else {
-                throw new SQLException("Não foi possível obter o próximo id_save.");
+                throw new SQLException("Não foi possível obter o próximo id.");
             }
         }
     }

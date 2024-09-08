@@ -2,14 +2,8 @@ package model;
 
 public class Save {
     private Integer idSave;
+    private Integer idJogador;
     private Cena cenaAtual;
-
-    public Save() {}
-
-    public Save(Integer idSave, Cena cenaAtual) {
-        this.idSave = idSave;
-        this.cenaAtual = cenaAtual;
-    }
 
     public Integer getIdSave() {
         return idSave;
@@ -17,6 +11,14 @@ public class Save {
 
     public void setIdSave(Integer idSave) {
         this.idSave = idSave;
+    }
+
+    public Integer getIdJogador() {
+        return idJogador;
+    }
+
+    public void setIdJogador(Integer idJogador) {
+        this.idJogador = idJogador;
     }
 
     public Cena getCenaAtual() {
@@ -29,9 +31,6 @@ public class Save {
 
     @Override
     public String toString() {
-        return "Save{" +
-                "idSave=" + idSave +
-                ", cenaAtual=" + cenaAtual +
-                '}';
+        return "Save [idSave=" + idSave + ", idJogador=" + idJogador + ", cenaAtual=" + cenaAtual + "]";
     }
 }

@@ -2,8 +2,6 @@ package model;
 
 public class Inventario {
     private Integer idInventario;
-    private Integer idSave;
-    private String nomeJogador;
     private String nomeItem;
     private String descricao;
 
@@ -13,22 +11,6 @@ public class Inventario {
 
     public void setIdInventario(Integer idInventario) {
         this.idInventario = idInventario;
-    }
-
-    public Integer getIdSave() {
-        return idSave;
-    }
-
-    public void setIdSave(Integer idSave) {
-        this.idSave = idSave;
-    }
-
-    public String getNomeJogador() {
-        return nomeJogador;
-    }
-
-    public void setNomeJogador(String nomeJogador) {
-        this.nomeJogador = nomeJogador;
     }
 
     public String getNomeItem() {
@@ -49,12 +31,10 @@ public class Inventario {
 
     @Override
     public String toString() {
-        return "Inventario{" +
+        return "Inventario{"+
                 "idInventario=" + idInventario +
-                ", idSave=" + idSave +
-                ", nomeJogador='" + nomeJogador + '\'' +
-                ", nomeItem='" + nomeItem + '\'' +
-                ", descricao='" + descricao + '\'' +
+                ", nomeItem=" + nomeItem +
+                ", descricao=" + descricao +
                 '}';
     }
 }
