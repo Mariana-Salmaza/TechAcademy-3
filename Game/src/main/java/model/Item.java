@@ -90,4 +90,14 @@ public class Item {
                 ", interagivel=" + interagivel +
                 '}';
     }
+
+    public String getDescricao() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getDescricao'");
+    }
+
+    public String getDetalhes() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getDetalhes'");
+    }
 }

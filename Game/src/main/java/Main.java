@@ -1,17 +1,28 @@
 import controller.AntesDoJogoController;
 import service.ComandoHelp;
 import service.ComandoStart;
+import service.ComandoUse;
+import service.ComandoGet;
+import service.ComandoInventory;
+import service.ComandoCheck;
+import service.ComandoLoad;
 import spark.Spark;
 
 public class Main {
     public static void main(String[] args) {
-
-        Spark.port(4567); 
+        Spark.port(4567);
 
         ComandoHelp comandoHelp = new ComandoHelp();
         ComandoStart comandoStart = new ComandoStart();
+        ComandoUse comandoUse = new ComandoUse();
+        ComandoGet comandoGet = new ComandoGet();
+        ComandoInventory comandoInventory = new ComandoInventory();
+        ComandoCheck comandoCheck = new ComandoCheck();
+        ComandoLoad comandoLoad = new ComandoLoad();
 
-        AntesDoJogoController controller = new AntesDoJogoController(comandoHelp, comandoStart);
+        AntesDoJogoController controller = new AntesDoJogoController(
+            comandoHelp, comandoStart, comandoUse, comandoCheck, comandoGet, comandoInventory, comandoLoad
+        );
 
         Spark.get("/:comando", controller);
 

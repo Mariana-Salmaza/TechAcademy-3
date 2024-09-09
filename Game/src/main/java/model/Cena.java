@@ -39,4 +39,8 @@ public class Cena {
                 ", itens=" + itens +
                 '}';
     }
+
+    public int getIdCena() {
+        throw new UnsupportedOperationException("Unimplemented method 'getIdCena'");
+    }
 }

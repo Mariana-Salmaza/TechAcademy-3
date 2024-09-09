@@ -1,39 +1,35 @@
 package repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import model.Save;
-import model.Cena;
-import java.sql.*;
 
 public class SaveDAO {
 
-    public static Save novoJogo() throws SQLException {
-        String sql = "INSERT INTO saves(id_cena_atual) VALUES (1)";
-        Save save = new Save();
-
-        try (Connection conn = Mysql.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            
-            stmt.executeUpdate();
-            
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    save.setIdSave(generatedKeys.getInt(1));
-                    
-                    Cena cenaAtual = CenaDAO.findCenaById(1);
-                    if (cenaAtual != null) {
-                        save.setCenaAtual(cenaAtual);
-                    } else {
-                        throw new SQLException("Cena com ID 1 não encontrada.");
-                    }
-                } else {
-                    throw new SQLException("Falha ao obter a chave gerada.");
-                }
+    public static void resetSaveToInitialState(int idSave) throws SQLException {
+        Connection connection = Mysql.getConnection();
+        String query = "UPDATE save SET id_cena_atual = ? WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        
+            int cenaInicialId = 1;
+            statement.setInt(1, cenaInicialId);
+            statement.setInt(2, idSave);
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Nenhuma linha atualizada, talvez o ID do save esteja incorreto.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(); 
             throw e; 
         }
+    }
 
-        return save;
+    public static Save findSaveById(int idSave) {
+        throw new UnsupportedOperationException("Unimplemented method 'findSaveById'");
+    }
+    public static Save novoJogo() {
+        throw new UnsupportedOperationException("Unimplemented method 'novoJogo'");
     }
 }
