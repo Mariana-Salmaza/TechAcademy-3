@@ -1,49 +1,50 @@
-CREATE DATABASE IF NOT EXISTS game;
+CREATE DATABASE game;
 USE game;
 
-CREATE TABLE IF NOT EXISTS cenas (
+
+CREATE TABLE cenas (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    descricao TEXT
+    descricao TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS itens_da_cena (
+CREATE TABLE itens_da_cena (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    id_cena INT,
-    nome VARCHAR(255) NOT NULL,
+    id_cena INT NOT NULL,
+    nome VARCHAR(100) NOT NULL,
     descricao_positiva TEXT,
     descricao_negativa TEXT,
-    comando_correto VARCHAR(255),
-    interagivel BOOLEAN,
+    comando_correto VARCHAR(100),
+    interagivel BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (id_cena) REFERENCES cenas(id)
 );
 
-CREATE TABLE IF NOT EXISTS save (
+CREATE TABLE comandos (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    id_jogador INT,
+    nome_comando VARCHAR(100) NOT NULL,
+    descricao TEXT
+);
+
+CREATE TABLE itens_inventario (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome_item VARCHAR(100) NOT NULL,
+    descricao TEXT,
+    id_save INT NOT NULL
+);
+
+CREATE TABLE save (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_jogador INT NOT NULL,
     id_cena_atual INT,
     FOREIGN KEY (id_cena_atual) REFERENCES cenas(id)
 );
 
-CREATE TABLE IF NOT EXISTS itens_inventario (
+CREATE TABLE use_with (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nome_item VARCHAR(255) NOT NULL,
-    descricao TEXT
-);
-
-
-CREATE TABLE IF NOT EXISTS use_with (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_item_inventario INT,
-    id_item_cena INT,
+    id_item_inventario INT NOT NULL,
+    id_item_cena INT NOT NULL,
     descricao_acao TEXT,
     FOREIGN KEY (id_item_inventario) REFERENCES itens_inventario(id),
     FOREIGN KEY (id_item_cena) REFERENCES itens_da_cena(id)
-);
-
-CREATE TABLE IF NOT EXISTS comandos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome_comando VARCHAR(255) NOT NULL,
-    descricao TEXT
 );
 
 INSERT INTO cenas (descricao) VALUES
@@ -77,3 +78,6 @@ INSERT INTO comandos (nome_comando, descricao) VALUES
 ('RESTART', 'Reinicia o jogo.');
 
 SHOW TABLES;
+
+
+
