@@ -21,6 +21,27 @@
             <artifactId>protobuf-java</artifactId>
             <version>4.26.1</version>
         </dependency>
+
+        <!-- Dependência do sparkjava -->
+        <dependency>
+            <groupId>com.sparkjava</groupId>
+            <artifactId>spark-core</artifactId>
+            <version>2.9.3</version>
+        </dependency>
+    
+        <!-- Dependência Gson -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.36</version>
+        </dependency>
+
     </dependencies>
 
     <build>

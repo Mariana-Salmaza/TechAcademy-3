@@ -1,45 +1,34 @@
-package main.java;
-
-import main.java.model.Cena;
-import main.java.model.Item;
-import main.java.model.Save;
-import main.java.repository.CenaDAO;
-import main.java.repository.ItemDAO;
-import main.java.repository.SaveDAO;
-
-
-import java.sql.SQLException;
-import java.util.Scanner;
+import controller.AntesDoJogoController;
+import service.ComandoHelp;
+import service.ComandoStart;
+import spark.Spark;
 
 public class Main {
     public static void main(String[] args) {
-        try {
 
-            Cena cena = CenaDAO.findCenaById(1);
-            System.out.println(cena.toString());
+        Spark.port(4567); 
 
+        ComandoHelp comandoHelp = new ComandoHelp();
+        ComandoStart comandoStart = new ComandoStart();
 
-            Scanner scanner = new Scanner(System.in);
-            
-//            while(true) {
-//                System.out.println("Digite o nome de um item para obter sua descrição:");
-//                String nomeItem = scanner.nextLine();
-//
-//
-//                Item item = ItemDAO.findItemByName(nomeItem);
-//
-//                if (item != null) {
-//                    System.out.println("Descrição do item: " + item.getDescricaoPositiva());
-//                } else {
-//                    System.out.println("Item não encontrado.");
-//                }
-//            }
+        AntesDoJogoController controller = new AntesDoJogoController(comandoHelp, comandoStart);
 
-            Save save = SaveDAO.novoJogo();
-            System.out.println(save.getCenaAtual());
+        Spark.get("/:comando", controller);
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Spark.options("/*", (request, response) -> {
+            String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
+            if (accessControlRequestHeaders != null) {
+                response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
+            }
+
+            String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
+            if (accessControlRequestMethod != null) {
+                response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
+            }
+
+            return "OK";
+        });
+
+        Spark.after((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
     }
 }

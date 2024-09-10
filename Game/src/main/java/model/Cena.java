@@ -1,18 +1,18 @@
-package main.java.model;
+package model;
 
 import java.util.List;
 
 public class Cena {
-    private Integer idCena;
+    private Integer id;
     private String descricao;
-    private List<Item> itens_da_cena;
+    private List<Item> itens;
 
-    public Integer getIdCena() {
-        return idCena;
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdCena(Integer idCena) {
-        this.idCena = idCena;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getDescricao() {
@@ -22,19 +22,21 @@ public class Cena {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
     public List<Item> getItens() {
-        return itens_da_cena;
+        return itens;
     }
 
     public void setItens(List<Item> itens) {
-        this.itens_da_cena = itens;
+        this.itens = itens;
     }
 
     @Override
     public String toString() {
         return "Cena{" +
-                "idCena=" + idCena +
+                "id=" + id +
                 ", descricao='" + descricao + '\'' +
+                ", itens=" + itens +
                 '}';
     }
 }
