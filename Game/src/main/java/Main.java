@@ -1,3 +1,4 @@
+package main.java;
 import controller.AntesDoJogoController;
 import service.ComandoHelp;
 import service.ComandoStart;
