@@ -4,31 +4,22 @@ import service.ComandoStart;
 import spark.Spark;
 
 public class Main {
+    private static final Gson gson = new Gson();
     public static void main(String[] args) {
 
-        Spark.port(4567); 
+        //Na classe main deixamos apenas as rotas da API
+        //controller -> É responsável por tratar as requisições e respostas http
+        //service -> É responsável pela lógica e regra de negócio da aplicação.
+        //model -> É responsável por definir os atributos e métodos das entidades do projeto.
+        //repository -> É responsável pela comunicação com o banco de dados.
 
-        ComandoHelp comandoHelp = new ComandoHelp();
-        ComandoStart comandoStart = new ComandoStart();
+        //Rota 1 http://localhost:4567/{o comando vai aqui}
+        Spark.get("/:comando", new AntesDoJogoController(gson));
 
-        AntesDoJogoController controller = new AntesDoJogoController(comandoHelp, comandoStart);
+        //Rota 2 http://localhost:4567/{comando}/{save}
+        Spark.get("/:comando/:save", new DuranteOJogoController(gson));
 
-        Spark.get("/:comando", controller);
+        //Implemente mais rotas se precisar
 
-        Spark.options("/*", (request, response) -> {
-            String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
-            if (accessControlRequestHeaders != null) {
-                response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
-            }
-
-            String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
-            if (accessControlRequestMethod != null) {
-                response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
-            }
-
-            return "OK";
-        });
-
-        Spark.after((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
     }
 }

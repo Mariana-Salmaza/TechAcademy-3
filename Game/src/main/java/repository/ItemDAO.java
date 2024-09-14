@@ -1,35 +1,37 @@
 package repository;
 
+import model.Cena;
 import model.Item;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemDAO {
+    public static Item findItemById(Integer id) {
+        return new Item();
+    }
 
-    public static Item findItemByName(String nome) throws SQLException {
-        String sql = "SELECT * FROM itens_da_cena WHERE nome = ?";
+    public static List<Item> findItensByScene(Cena cena) throws SQLException {
+        Connection connection = Mysql.getConnection();
+        String sql = "select * from itens i where id_cena_atual = ?;";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, cena.getIdCena());
+        ResultSet resultSet = ps.executeQuery();
 
-        try (Connection conn = Mysql.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        List<Item> itens = new ArrayList<>();
+        while (resultSet.next()) {
+            Item item = new Item();
+            item.setIdItem(resultSet.getInt("id_item"));
+            item.setNome(resultSet.getString("nome"));
 
-            stmt.setString(1, nome);
+            Integer idCenaAtual = resultSet.getInt("id_cena_atual");
 
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    Item item = new Item();
-                    item.setIdItem(rs.getInt("id"));
-                    item.setNome(rs.getString("nome"));
-                    item.setDescricaoPositiva(rs.getString("descricao_positiva"));
-                    item.setDescricaoNegativa(rs.getString("descricao_negativa"));
-                    item.setComandoCorreto(rs.getString("comando_correto"));
-                    item.setInteragivel(rs.getBoolean("interagivel"));
-                    return item;
-                } else {
-                    return null;
-                }
-            }
+            item.setIdCenaAtual(idCenaAtual);
+
+            itens.add(item);
         }
+
+        return itens;
     }
 }

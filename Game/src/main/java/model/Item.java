@@ -3,24 +3,13 @@ package model;
 public class Item {
 
     private Integer idItem;
-    private Cena id_Cena;
+    private Integer idCenaAtual; 
+    private Integer idCenaDestino;  
     private String nome;
     private String descricaoPositiva;
     private String descricaoNegativa;
     private String comandoCorreto;
     private Boolean interagivel;
-
-    public Item() {}
-
-    public Item(Integer idItem, Cena id_Cena, String nome, String descricaoPositiva, String descricaoNegativa, String comandoCorreto, Boolean interagivel) {
-        this.idItem = idItem;
-        this.id_Cena = id_Cena;
-        this.nome = nome;
-        this.descricaoPositiva = descricaoPositiva;
-        this.descricaoNegativa = descricaoNegativa;
-        this.comandoCorreto = comandoCorreto;
-        this.interagivel = interagivel;
-        }
 
     public Integer getIdItem() {
         return idItem;
@@ -30,12 +19,20 @@ public class Item {
         this.idItem = idItem;
     }
 
-    public Cena getId_Cena() {
-        return id_Cena;
+    public Integer getIdCenaAtual() {
+        return idCenaAtual;
     }
 
-    public void setId_Cena(Cena id_Cena) {
-        this.id_Cena = id_Cena;
+    public void setIdCenaAtual(Integer idCenaAtual) {
+        this.idCenaAtual = idCenaAtual;
+    }
+
+    public Integer getIdCenaDestino() {
+        return idCenaDestino;
+    }
+
+    public void setIdCenaDestino(Integer idCenaDestino) {
+        this.idCenaDestino = idCenaDestino;
     }
 
     public String getNome() {
@@ -76,18 +73,5 @@ public class Item {
 
     public void setInteragivel(Boolean interagivel) {
         this.interagivel = interagivel;
-    }
-
-    @Override
-    public String toString() {
-        return "Item{" +
-                "idItem=" + idItem +
-                ", id_Cena=" + id_Cena +
-                ", nome='" + nome + '\'' +
-                ", descricaoPositiva='" + descricaoPositiva + '\'' +
-                ", descricaoNegativa='" + descricaoNegativa + '\'' +
-                ", comandoCorreto='" + comandoCorreto + '\'' +
-                ", interagivel=" + interagivel +
-                '}';
     }
 }

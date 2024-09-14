@@ -11,8 +11,8 @@ public class Cena {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdCena(Integer id) {
+        this.idCena = id;
     }
 
     public String getDescricao() {
@@ -34,7 +34,7 @@ public class Cena {
     @Override
     public String toString() {
         return "Cena{" +
-                "id=" + id +
+                "id=" + idCena +
                 ", descricao='" + descricao + '\'' +
                 ", itens=" + itens +
                 '}';
