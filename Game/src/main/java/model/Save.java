@@ -20,5 +20,10 @@ public class Save {
         this.cenaAtual = cenaAtual;
     }
 
+    @Override
+    public String toString() {
+        return "Save [idSave=" + idSave + ", cenaAtual=" + cenaAtual + "]";
+    }
+    
     
 }

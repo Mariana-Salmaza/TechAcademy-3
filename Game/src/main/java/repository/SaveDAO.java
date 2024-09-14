@@ -1,35 +1,22 @@
 package repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
 import model.Save;
+
+import java.sql.*;
 
 public class SaveDAO {
 
-    public static void resetSaveToInitialState(int idSave) throws SQLException {
-        Connection connection = Mysql.getConnection();
-        String query = "UPDATE save SET id_cena_atual = ? WHERE id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-        
-            int cenaInicialId = 1;
-            statement.setInt(1, cenaInicialId);
-            statement.setInt(2, idSave);
-            int affectedRows = statement.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("Nenhuma linha atualizada, talvez o ID do save esteja incorreto.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace(); 
-            throw e; 
+    public static Save novoJogo() throws SQLException {
+        Connection conn = Mysql.getConnection();
+        String sql = "INSERT INTO save(id_cena_atual) VALUES (1)";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.execute(sql, Statement.RETURN_GENERATED_KEYS);
+        ResultSet generatedKeys = stmt.getGeneratedKeys();
+        Save save = new Save();
+        if(generatedKeys.next()){
+            save.setIdSave(generatedKeys.getInt(1));
+            save.setCenaAtual(CenaDAO.findCenaById(1));
         }
-    }
-
-    public static Save findSaveById(int idSave) {
-        throw new UnsupportedOperationException("Unimplemented method 'findSaveById'");
-    }
-    public static Save novoJogo() {
-        throw new UnsupportedOperationException("Unimplemented method 'novoJogo'");
+        return save;
     }
 }

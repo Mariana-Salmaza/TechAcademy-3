@@ -1,46 +1,25 @@
-package main.java;
+import com.google.gson.Gson;
 import controller.AntesDoJogoController;
-import service.ComandoHelp;
-import service.ComandoStart;
-import service.ComandoUse;
-import service.ComandoGet;
-import service.ComandoInventory;
-import service.ComandoCheck;
-import service.ComandoLoad;
+import controller.DuranteOJogoController;
 import spark.Spark;
 
 public class Main {
+    private static final Gson gson = new Gson();
     public static void main(String[] args) {
-        Spark.port(4567);
 
-        ComandoHelp comandoHelp = new ComandoHelp();
-        ComandoStart comandoStart = new ComandoStart();
-        ComandoUse comandoUse = new ComandoUse();
-        ComandoGet comandoGet = new ComandoGet();
-        ComandoInventory comandoInventory = new ComandoInventory();
-        ComandoCheck comandoCheck = new ComandoCheck();
-        ComandoLoad comandoLoad = new ComandoLoad();
+        //Na classe main deixamos apenas as rotas da API
+        //controller -> É responsável por tratar as requisições e respostas http
+        //service -> É responsável pela lógica e regra de negócio da aplicação.
+        //model -> É responsável por definir os atributos e métodos das entidades do projeto.
+        //repository -> É responsável pela comunicação com o banco de dados.
 
-        AntesDoJogoController controller = new AntesDoJogoController(
-            comandoHelp, comandoStart, comandoUse, comandoCheck, comandoGet, comandoInventory, comandoLoad
-        );
+        //Rota 1 http://localhost:4567/{o comando vai aqui}
+        Spark.get("/:comando", new AntesDoJogoController(gson));
 
-        Spark.get("/:comando", controller);
+        //Rota 2 http://localhost:4567/{comando}/{save}
+        Spark.get("/:comando/:save", new DuranteOJogoController(gson));
 
-        Spark.options("/*", (request, response) -> {
-            String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
-            if (accessControlRequestHeaders != null) {
-                response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
-            }
+        //Implemente mais rotas se precisar
 
-            String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
-            if (accessControlRequestMethod != null) {
-                response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
-            }
-
-            return "OK";
-        });
-
-        Spark.after((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
     }
 }

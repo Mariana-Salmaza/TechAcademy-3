@@ -3,16 +3,16 @@ package model;
 import java.util.List;
 
 public class Cena {
-    private Integer id;
+    private Integer idCena;
     private String descricao;
     private List<Item> itens;
 
-    public Integer getId() {
-        return id;
+    public Integer getIdCena() {
+        return idCena;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdCena(Integer id) {
+        this.idCena = id;
     }
 
     public String getDescricao() {
@@ -34,13 +34,9 @@ public class Cena {
     @Override
     public String toString() {
         return "Cena{" +
-                "id=" + id +
+                "id=" + idCena +
                 ", descricao='" + descricao + '\'' +
                 ", itens=" + itens +
                 '}';
-    }
-
-    public int getIdCena() {
-        throw new UnsupportedOperationException("Unimplemented method 'getIdCena'");
     }
 }

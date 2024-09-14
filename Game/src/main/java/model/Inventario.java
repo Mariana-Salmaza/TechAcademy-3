@@ -36,7 +36,4 @@ public class Inventario {
         return "Inventario [idInventario=" + idInventario + ", nomeItem=" + nomeItem + ", descricao=" + descricao
                 + ", id_save=" + id_save + "]";
     }
-    public Object getQuantidade() {
-        throw new UnsupportedOperationException("Unimplemented method 'getQuantidade'");
-    }
 }
