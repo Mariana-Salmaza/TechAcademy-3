@@ -1,4 +1,3 @@
-
 CREATE DATABASE game;
 USE game;
 
@@ -25,11 +24,11 @@ CREATE TABLE IF NOT EXISTS itens_da_cena (
 
 CREATE TABLE IF NOT EXISTS itens_inventario (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nome_item VARCHAR(100) NOT NULL,
-    descricao TEXT,	
+    nome VARCHAR(100) NOT NULL,
+    descricao_positiva TEXT,
+    descricao_negativa TEXT,
     id_save INT NOT NULL
 );
-
 
 CREATE TABLE IF NOT EXISTS save (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -68,3 +67,13 @@ INSERT INTO itens_da_cena (id_item, nome, descricao_positiva, descricao_negativa
 (8, 'PERGAMINHO MÁGICO', 'Um PERGAMINHO que pode revelar pistas importantes para resolver o enigma da câmara.', 'O pergaminho não é necessário agora.', 'USE PERGAMINHO MÁGICO', 4, NULL, 1),
 (9, 'ARTEFATO LENDÁRIO', 'Um ARTEFATO antigo que brilha com uma luz mágica. É o objetivo final do jogo.', 'Você não pode pegar o artefato sem resolver o enigma primeiro.', 'USE ARTEFATO LENDÁRIO', 5, NULL, 0),
 (10, 'ENIGMA', 'Um ENIGMA gravado na parede que deve ser resolvido para acessar o artefato.', 'Você não pode resolver o enigma sem pistas.', 'RESOLVA ENIGMA', 5, NULL, 1);
+
+INSERT INTO itens_inventario (nome, descricao_positiva, descricao_negativa, id_save) VALUES 
+('LANTERNA', 'Uma lanterna brilhante, ainda com um pouco de óleo.', 'Não funciona muito bem.', 1),
+('CHAVE DE FERRO', 'Uma chave enferrujada, aparentemente usada para trancar algo.', 'Essa chave não parece servir para nada aqui.', 1),
+('DIÁRIO DO CONDE', 'Um velho diário que fala sobre os segredos do castelo.', 'O diário não tem informações úteis neste momento.', 1),
+('MAPA DO CASTELO', 'Um mapa antigo que pode ajudar a explorar o castelo.', 'O mapa não revela nada novo agora.', 1),
+('ESPADA DE PRATA', 'Uma espada antiga com inscrições mágicas. Pode ser útil em um confronto futuro.', 'A espada não tem utilidade imediata agora.', 2),
+('LIVRO DE FEITIÇOS', 'Um livro que contém feitiços antigos e rituais. Pode ajudar a resolver o enigma.', 'O livro não ajuda diretamente com o enigma agora.', 2),
+('PERGAMINHO MÁGICO', 'Um pergaminho que pode revelar pistas importantes para resolver o enigma da câmara.', 'O pergaminho não é necessário agora.', 2),
+('ARTEFATO LENDÁRIO', 'Um artefato antigo que brilha com uma luz mágica. É o objetivo final do jogo.', 'Você não pode pegar o artefato sem resolver o enigma primeiro.', 3);
