@@ -1,26 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>jogo em java</title>
+<?php
 
-    <link rel="stylesheet" href="css/style.scss">
-</head>
-<body>
+session_start();
 
-<header>
-        <div class="logo">
-            <img src="img/logo.png" alt="Logo" class="width">
-        </div>
-    </header>
+if(isset($_GET['comando']) && isset($_GET['save']) && $_GET['save']) {
+    $comando = rawurlencode($_GET['comando']);
+    $save = rawurlencode($_GET['save']);
+    $conteudo = file_get_contents("htpp://localhost:4567/{$comando}/{$save}");
+} else if(isset($_GET['comando'])) {
+    $comando = rawurlencode($_GET['comando']);
+    $conteudo = file_get_contents("http://localhost:4567/{$comando}");
+}else {
+    $conteudo = file_get_contents("http://localhost:4567");
+}
 
-    <div class="container">
-        <textarea class="card" placeholder="Digite seu texto aqui"></textarea>
-    </div>
+$arrayAssociativo = json_decode($conteudo);
+$_SESSION['historico'] = isset($_SESSION['historico']) ? array_merge($_SESSION['historico'], $arrayAssociativo) : [];
 
+$arrayAssociativo = $_SESSION['historico'];
 
-
-
-</body>
-</html>
+include "templete.phtml";
