@@ -1,21 +1,29 @@
 package repository;
 
-import model.Save;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class SaveDAO {
+    private Connection connection;
 
-    public static Save novoJogo() throws SQLException {
-        Connection conn = Mysql.getConnection();
-        String sql = "INSERT INTO save(id_cena_atual) VALUES (1)";
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.execute(sql, Statement.RETURN_GENERATED_KEYS);
-        ResultSet generatedKeys = stmt.getGeneratedKeys();
-        Save save = new Save();
-        if(generatedKeys.next()){
-            save.setIdSave(generatedKeys.getInt(1));
-            save.setCenaAtual(CenaDAO.findCenaById(1));
+    public SaveDAO(Connection connection) {
+        this.connection = connection;
+    }
+
+    public int criarNovoSave(int idJogador) throws SQLException {
+        String sql = "INSERT INTO saves (id_jogador) VALUES (?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            stmt.setInt(1, idJogador);
+            stmt.executeUpdate();
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Falha ao obter o ID do save.");
+                }
+            }
         }
-        return save;
     }
 }
