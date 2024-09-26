@@ -1,8 +1,9 @@
-import service.ComandoService;
-import repository.CenaDAO;
+import model.Save;
 import repository.ItemDaCenaDAO;
-import repository.ItemInventarioDAO;
-import repository.SaveDAO;
+import repository.CenaDAO;
+import service.ComandoService;
+import controller.AntesDoJogoController;
+import controller.DuranteOJogoController;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,66 +11,52 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Main {
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/game";
+    private static final String USER = "root";
+    private static final String PASS = "";
+
     public static void main(String[] args) {
-
-        String url = "jdbc:mysql://localhost:3306/game";
-        String user = "root";
-        String password = "";
-
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
-    
-            ItemInventarioDAO itemInventarioDAO = new ItemInventarioDAO(connection);
+        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
             ItemDaCenaDAO itemDaCenaDAO = new ItemDaCenaDAO(connection);
             CenaDAO cenaDAO = new CenaDAO(connection);
-            SaveDAO saveDAO = new SaveDAO(connection);
-
-            ComandoService comandoService = new ComandoService(itemInventarioDAO, itemDaCenaDAO, cenaDAO, saveDAO);
-            
-            comandoService.start();
-
+            ComandoService comandoService = new ComandoService(itemDaCenaDAO, cenaDAO);
+            AntesDoJogoController antesDoJogoController = new AntesDoJogoController(comandoService);
+            Save save = new Save();
+            DuranteOJogoController duranteOJogoController = new DuranteOJogoController(comandoService, save);
+    
             Scanner scanner = new Scanner(System.in);
             String comando;
-
-            System.out.println("Bem-vindo ao jogo! Digite /help para ver a lista de comandos.");
-
+    
+            // Lógica antes do jogo
+            System.out.println("\nDigite 'start' para iniciar o jogo ou 'exit' para sair.\n");
             while (true) {
-                System.out.print("Digite um comando: ");
                 comando = scanner.nextLine().trim();
-            
-                switch (comando.toLowerCase()) {
-                    case "/help":
-                        System.out.println(comandoService.help());
-                        break;
-                    case "/restart":
-                        comandoService.restart();
-                        break;
-                    case "/inventory":
-                        comandoService.mostrarInventario();
-                        break;
-                    default:
-                        if (comando.startsWith("/get ")) {
-                            String itemNome = comando.substring(5);
-                            comandoService.pegarItem(itemNome);
-                        } else if (comando.startsWith("/use ")) {
-                            String itemNome = comando.substring(5);
-                            comandoService.usarItem(itemNome);
-                        } else if (comando.startsWith("/usewith ")) {
-                            String[] partes = comando.split(" ");
-                            if (partes.length >= 3) {
-                                String itemInventarioNome = partes[1];
-                                String itemCenaNome = partes[2];
-                                comandoService.usarCom(itemInventarioNome, itemCenaNome);
-                            } else {
-                                System.out.println("Uso incorreto do comando /usewith. Exemplo: /usewith itemInventario itemCena");
-                            }
-                        } else {
-                            System.out.println("Comando não reconhecido. Digite /help para ver a lista de comandos.");
-                        }
-                        break;
+                if (comando.equalsIgnoreCase("exit")) {
+                    System.out.println("\nSaindo do jogo. Até logo!\n");
+                    return;
+                }
+    
+                String resposta = antesDoJogoController.iniciarJogo(comando);
+                System.out.println("\n" + resposta + "\n");
+                if (resposta.contains("Jogo iniciado")) {
+                    break; 
                 }
             }
+    
+            System.out.println("\nVocê pode começar a jogar! Digite um comando:\n");
+            while (true) {
+                comando = scanner.nextLine().trim();
+                if (comando.equalsIgnoreCase("exit")) {
+                    System.out.println("\nSaindo do jogo. Até logo!\n");
+                    return;
+                }
+    
+                String resposta = duranteOJogoController.processarComando(comando);
+                System.out.println("\n" + resposta + "\n");
+            }
         } catch (SQLException e) {
-            System.err.println("Erro ao conectar ao banco de dados: " + e.getMessage());
+            System.out.println("\nErro ao conectar ao banco de dados: " + e.getMessage() + "\n");
         }
     }
+    
 }

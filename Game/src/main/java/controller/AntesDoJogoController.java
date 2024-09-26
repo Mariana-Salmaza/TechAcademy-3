@@ -1,63 +1,18 @@
 package controller;
 
-import com.google.gson.Gson;
-import model.ItemDaCena;
-import repository.ItemDaCenaDAO;
-import spark.Request;
-import spark.Response;
-import spark.Route;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
+import service.ComandoService;
 
 public class AntesDoJogoController {
-    private ItemDaCenaDAO itemDaCenaDAO = null;
-    private Gson gson = new Gson();
+    private final ComandoService comandoService;
 
-    public AntesDoJogoController(Connection connection) {
-        this.itemDaCenaDAO = new ItemDaCenaDAO(connection);
+    public AntesDoJogoController(ComandoService comandoService) {
+        this.comandoService = comandoService;
     }
 
-    public Route adicionarItem = (Request req, Response res) -> {
-        try {
-            int idItem = Integer.parseInt(req.queryParams("idItem"));
-            String nome = req.queryParams("nome");
-            String descricaoPositiva = req.queryParams("descricao_positiva");
-            String descricaoNegativa = req.queryParams("descricao_negativa");
-            String comandoCorreto = req.queryParams("comando_correto");
-            int idCenaAtual = Integer.parseInt(req.queryParams("id_cena_atual"));
-            int idCenaDestino = Integer.parseInt(req.queryParams("id_cena_destino"));
-            boolean interagivel = Boolean.parseBoolean(req.queryParams("interagivel"));
-
-            ItemDaCena item = new ItemDaCena(idItem, nome, descricaoPositiva, descricaoNegativa, comandoCorreto, idCenaAtual, idCenaDestino, interagivel);
-
-            itemDaCenaDAO.inserirItemDaCena(item);
-            res.status(201);
-            return "Item inserido com sucesso!";
-        } catch (SQLException e) {
-            res.status(500);
-            return "Erro ao inserir item: " + e.getMessage();
-        } catch (NumberFormatException e) {
-            res.status(400);
-            return "Erro: parâmetros inválidos.";
+    public String iniciarJogo(String comando) {
+        if (comando.equalsIgnoreCase("start")) {
+            return "Jogo iniciado. Você pode começar sua aventura!";
         }
-    };
-
-    public Route listarItensDaCena = (Request req, Response res) -> {
-        int idCena = Integer.parseInt(req.queryParams("id_cena"));
-        List<ItemDaCena> itens;
-
-        try {
-            itens = itemDaCenaDAO.listarItensDaCenaPorId(idCena);
-            res.type("application/json");
-            return gson.toJson(itens);
-        } catch (SQLException e) {
-            res.status(500);
-            return "Erro ao listar itens: " + e.getMessage();
-        } catch (NumberFormatException e) {
-            res.status(400);
-            return "Erro: parâmetros inválidos.";
-        }
-    };
+        return "Comando inválido. Digite 'start' para iniciar o jogo.";
+    }
 }

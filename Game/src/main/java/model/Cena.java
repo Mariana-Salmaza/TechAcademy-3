@@ -9,19 +9,16 @@ public class Cena {
         this.descricao = descricao;
     }
 
-
-    public Cena() {}
-
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getDescricao() {
         return descricao;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setDescricao(String descricao) {

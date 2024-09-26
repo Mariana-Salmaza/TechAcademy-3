@@ -34,4 +34,8 @@ public class Save {
                 ", idCenaAtual=" + idCenaAtual +
                 '}';
     }
+
+    public int getIdSave() {
+        return this.id;
+    }
 }

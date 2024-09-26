@@ -1,213 +1,178 @@
 package service;
 
+import model.Save;
 import model.Cena;
-import model.ItemDaCena;
-import model.ItemInventario;
 import repository.CenaDAO;
 import repository.ItemDaCenaDAO;
-import repository.ItemInventarioDAO;
-import repository.SaveDAO;
-import java.sql.SQLException;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class ComandoService {
-    private int idCenaAtual;
-    private int idSave;
-    private ItemInventarioDAO itemInventarioDAO;
-    private ItemDaCenaDAO itemDaCenaDAO;
-    private CenaDAO cenaDAO;
-    private SaveDAO saveDAO;
+    private final ItemDaCenaDAO itemDaCenaDAO;
+    private final CenaDAO cenaDAO;
+    private List<String> inventario;
 
-    public ComandoService(ItemInventarioDAO itemInventarioDAO, ItemDaCenaDAO itemDaCenaDAO, CenaDAO cenaDAO,SaveDAO saveDAO) {
-        this.itemInventarioDAO = itemInventarioDAO;
+    public ComandoService(ItemDaCenaDAO itemDaCenaDAO, CenaDAO cenaDAO) {
         this.itemDaCenaDAO = itemDaCenaDAO;
         this.cenaDAO = cenaDAO;
-        this.saveDAO = saveDAO;
-        this.idCenaAtual = 1;
+        this.inventario = new ArrayList<>();
     }
 
-    public void start() throws SQLException {
-    
-        Cena cenaInicial = cenaDAO.getCenaInicial();
-        if (cenaInicial != null) {
-            idCenaAtual = cenaInicial.getId();
-            System.out.println("Bem-vindo ao jogo!");
-            System.out.println("Você está na cena: " + cenaInicial.getDescricao());
-            System.out.println(cenaInicial.getDescricao()); 
-            exibirCenaAtual();
-        } else {
-            System.out.println("Erro ao carregar a cena inicial.");
+    public String processarComando(String comando, Save save) {
+        System.out.println("Estado atual do Save: idCenaAtual = " + save.getIdCenaAtual());
+
+        if (save.getIdCenaAtual() == 0) {
+            return start(save);
+        }
+
+        switch (comando.toLowerCase()) {
+            case "help":
+                return obterDescricaoCena(save) + "\n" + help();
+            case "restart":
+                return reiniciarJogo(save) + "\n" + obterDescricaoCena(save);
+            case "inventory":
+                return mostrarInventario() + "\n" + obterDescricaoCena(save);
+            default:
+                if (comando.startsWith("get ")) {
+                    String resultadoGet = pegarItem(save, comando.substring(4).trim());
+                    return resultadoGet + "\n" + obterDescricaoCena(save);
+                } else if (comando.startsWith("use ")) {
+                    String resultadoUse = usarItem(save, comando.substring(4).trim());
+                    return resultadoUse + "\n" + obterDescricaoCena(save);
+                } else {
+                    return "Comando não reconhecido.\n" + obterDescricaoCena(save);
+                }
         }
     }
 
-    private void exibirCenaAtual() {
+    private String start(Save save) {
+        save.setIdCenaAtual(1);
+        System.out.println("Iniciando o jogo... Cena atual: " + save.getIdCenaAtual());
+        return obterDescricaoCena(save);
+    }
+
+    private String reiniciarJogo(Save save) {
+        save.setIdCenaAtual(1);
+        System.out.println("Reiniciando o jogo... Cena atual: " + save.getIdCenaAtual());
+        return obterDescricaoCena(save);
+    }
+
+    private String obterDescricaoCena(Save save) {
         try {
-            Cena cena = cenaDAO.findCenaById(idCenaAtual);
+            Cena cena = cenaDAO.getCenaPorId(save.getIdCenaAtual());
             if (cena != null) {
-                System.out.println("Cena: " + cena.getDescricao());
-                listarItensDaCena();
+                return "Você está na cena " + cena.getId() + ": " + cena.getDescricao() +
+                       "\nComandos disponíveis: help, restart, inventory, use <item>, get <item>." +
+                       "\nDigite um comando para continuar.";
             } else {
-                System.out.println("Cena não encontrada.");
-            }
-        } catch (SQLException e) {
-            System.out.println("Erro ao buscar cena: " + e.getMessage());
-        }
-    }
-
-    private void listarItensDaCena() {
-        try {
-            List<ItemDaCena> itens = itemDaCenaDAO.listarItensDaCenaPorId(idCenaAtual);
-            if (!itens.isEmpty()) {
-                System.out.println("Itens disponíveis na cena:");
-                for (ItemDaCena item : itens) {
-                    System.out.println("- " + item.getNome());
-                }
-            } else {
-                System.out.println("Não há itens nesta cena.");
-            }
-        } catch (SQLException e) {
-            System.out.println("Erro ao listar itens da cena: " + e.getMessage());
-        }
-    }
-
-    // HELP
-    public String help() {
-
-        return "Comandos disponíveis:\n" +
-                "/start - Inicia o jogo.\n" +
-                "/help - Exibe esta lista de comandos.\n" +
-                "/use [ITEM] - Usa um item do inventário.\n" +
-                "/get [ITEM] - Pega um item da cena.\n" +
-                "/usewith [ITEM_INVENTARIO] [ITEM_CENA] - Usa um item do inventário com um item da cena.\n" +
-                "/inventory - Exibe os itens no inventário.\n" +
-                "/restart - Reinicia o jogo.\n";
-    }
-
-    public void pegarItem(String itemNome) {
-        try {
-            List<ItemDaCena> itensCena = itemDaCenaDAO.listarItensDaCenaPorId(idCenaAtual);
-            for (ItemDaCena itemCena : itensCena) {
-                if (itemCena.getNome().equalsIgnoreCase(itemNome)) {
-                    itemInventarioDAO.adicionarItem(new ItemInventario(
-                            itemCena.getIdItem(),
-                            itemCena.getNome(),
-                            itemCena.getDescricaoPositiva(),
-                            itemCena.getDescricaoNegativa(),
-                            idSave));
-                    System.out.println("Você pegou o item: " + itemCena.getNome());
-                    return;
-                }
-            }
-            System.out.println("Item não encontrado na cena.");
-        } catch (SQLException e) {
-            System.out.println("Erro ao pegar item da cena: " + e.getMessage());
-        }
-    }
-
-    // Usa um item do inventário
-    public void usarItem(String itemNome) {
-        try {
-            ItemInventario itemInventario = itemInventarioDAO.buscarPorNome(itemNome);
-            if (itemInventario != null) {
-                List<ItemDaCena> itensCena = itemDaCenaDAO.listarItensDaCenaPorId(idCenaAtual);
-                boolean itemUsado = false;
-
-                for (ItemDaCena itemCena : itensCena) {
-                    if (itemCena.getNome().equalsIgnoreCase(itemNome)) {
-                        System.out.println(itemCena.getDescricaoPositiva());
-                        itemUsado = true;
-                        break;
-                    }
-                }
-
-                if (!itemUsado) {
-                    System.out.println(itemInventario.getDescricaoNegativa());
-                }
-            } else {
-                System.out.println("Item não encontrado no inventário.");
-            }
-        } catch (SQLException e) {
-            System.out.println("Erro ao usar item: " + e.getMessage());
-        }
-    }
-
-    public void usarCom(String itemInventarioNome, String itemCenaNome) {
-        try {
-            ItemInventario itemInventario = itemInventarioDAO.buscarPorNome(itemInventarioNome);
-            if (itemInventario == null) {
-                System.out.println("Item do inventário não encontrado.");
-                return;
-            }
-
-            List<ItemDaCena> itensCena = itemDaCenaDAO.listarItensDaCenaPorId(idCenaAtual);
-            if (itensCena.isEmpty()) {
-                System.out.println("Nenhum item encontrado na cena.");
-                return;
-            }
-
-            for (ItemDaCena itemCena : itensCena) {
-                if (itemCena.getNome().equalsIgnoreCase(itemCenaNome)) {
-                    if (itemDaCenaDAO.verificarUso(itemInventario.getId(), itemCena.getIdItem())) {
-                        System.out.println("Você usou " + itemInventario.getNome() + " com " + itemCena.getNome());
-                        aplicarEfeitos(itemInventario, itemCena);
-                        return;
-                    } else {
-                        System.out.println("Esses itens não podem ser usados juntos.");
-                        return;
-                    }
-                }
-            }
-            System.out.println("Item da cena não encontrado.");
-        } catch (SQLException e) {
-            System.out.println("Erro ao usar itens juntos: " + e.getMessage());
-        }
-    }
-
-    private void aplicarEfeitos(ItemInventario itemInventario, ItemDaCena itemCena) {
-        String efeito = "";
-        int novaCenaId = -1;
-
-        if (itemInventario.getNome().equalsIgnoreCase("LANTERNA")
-                && itemCena.getNome().equalsIgnoreCase("PORTA ESCURA")) {
-            efeito = "A lanterna ilumina a porta escura, revelando um caminho.";
-            novaCenaId = 2;
-        } else if (itemInventario.getNome().equalsIgnoreCase("CHAVE") && itemCena.getNome().equalsIgnoreCase("COFRE")) {
-            efeito = "Você usa a chave para abrir o cofre e encontra um tesouro.";
-            novaCenaId = 3;
-        }
-
-        System.out.println(efeito);
-
-        if (novaCenaId != -1) {
-            mudarCena(novaCenaId);
-        }
-    }
-
-    private void mudarCena(int novaCenaId) {
-        idCenaAtual = novaCenaId;
-        exibirCenaAtual();
-    }
-
-    public void mostrarInventario() {
-        try {
-            List<ItemInventario> inventario = itemInventarioDAO.listarItensPorSave(idSave);
-            if (inventario.isEmpty()) {
-                System.out.println("Seu inventário está vazio.");
-            } else {
-                System.out.println("Itens no seu inventário:");
-                for (ItemInventario item : inventario) {
-                    System.out.println("- " + item.getNome());
-                }
+                return "Cena não encontrada.";
             }
         } catch (Exception e) {
-            System.out.println("Erro ao exibir inventário: " + e.getMessage());
+            return "Erro ao buscar descrição da cena: " + e.getMessage();
         }
     }
 
-    // RESTART
-    public void restart() {
-        idCenaAtual = 1;
-        System.out.println("O jogo foi reiniciado.");
-        exibirCenaAtual();
+    public String usarItem(Save save, String item) {
+        try {
+            System.out.println("Usando item: " + item + " na cena: " + save.getIdCenaAtual());
+
+            switch (save.getIdCenaAtual()) {
+                case 1:
+                    if (item.equalsIgnoreCase("LANTERNA")) {
+                        save.setIdCenaAtual(2);
+                        System.out.println("Avançando para a cena 2.");
+                        return "Você usou a LANTERNA corretamente! Avançando para a próxima cena...";
+                    } else {
+                        return "Esse item não serve para esse caso, tente novamente.";
+                    }
+
+                case 2:
+                    if (item.equalsIgnoreCase("CHAVE DE FERRO")) {
+                        save.setIdCenaAtual(3);
+                        System.out.println("Avançando para a cena 3.");
+                        return "Você usou a CHAVE DE FERRO e abriu a porta! Avançando para a próxima cena...";
+                    }
+                    return "Esse item não serve para esse caso, tente novamente.";
+
+                case 3:
+                    if (item.equalsIgnoreCase("ESPADA DE PRATA")) {
+                        // Implementar lógica específica para usar a espada, se necessário
+                        return "Você usou a ESPADA DE PRATA.";
+                    }
+                    return "Esse item não serve para esse caso, tente novamente.";
+
+                case 4:
+                    if (item.equalsIgnoreCase("TALISMAN")) {
+                        save.setIdCenaAtual(5);
+                        System.out.println("Avançando para a cena 5.");
+                        return "Você usou o TALISMAN! Avançando para a próxima cena...";
+                    }
+                    return "Esse item não serve para esse caso, tente novamente.";
+
+                case 5:
+                    if (item.equalsIgnoreCase("CARTAS ANTIGAS")) {
+                        save.setIdCenaAtual(6);
+                        System.out.println("Avançando para a cena 6.");
+                        return "Você usou as CARTAS ANTIGAS! Avançando para a sala do tesouro...";
+                    }
+                    return "Esse item não serve para esse caso, tente novamente.";
+
+                case 6:
+                    return "Parabéns, você chegou à sala do tesouro! Você ganhou!";
+
+                default:
+                    return "Cena não reconhecida.";
+            }
+        } catch (Exception e) {
+            return "Erro ao usar item: " + e.getMessage();
+        }
+    }
+
+    public String pegarItem(Save save, String item) {
+        if (inventario.contains(item.toUpperCase())) {
+            return "Você já possui " + item.toUpperCase() + " no seu inventário.";
+        }
+    
+        switch (save.getIdCenaAtual()) {
+            case 1:
+                // Itens disponíveis na cena 1
+                if (item.equalsIgnoreCase("LANTERNA") || item.equalsIgnoreCase("CHAVE DE FERRO")) {
+                    inventario.add(item.toUpperCase());
+                    return "Você pegou " + item.toUpperCase() + ".";
+                }
+                break;
+            case 2:
+                // Itens disponíveis na cena 2
+                if (item.equalsIgnoreCase("CHAVE DE FERRO")) {
+                    inventario.add(item.toUpperCase());
+                    return "Você pegou " + item.toUpperCase() + ".";
+                }
+                break;
+            case 3:
+                // Itens disponíveis na cena 3
+                if (item.equalsIgnoreCase("DIÁRIO ANTIGO") || item.equalsIgnoreCase("ESPADA DE PRATA")) {
+                    inventario.add(item.toUpperCase());
+                    return "Você pegou " + item.toUpperCase() + ".";
+                }
+                break;
+            // Adicione outras cenas conforme necessário
+            default:
+                return "Item não disponível para coleta nesta cena.";
+        }
+    
+        return "Item não disponível para coleta nesta cena.";
+    }
+    
+
+    private String mostrarInventario() {
+        if (inventario.isEmpty()) {
+            return "Seu inventário está vazio.";
+        }
+        return "Itens no inventário: " + String.join(", ", inventario) + ".";
+    }
+
+    private String help() {
+        return "Comandos disponíveis: help, start, restart, use <item>, get <item>, inventory.";
     }
 }

@@ -1,17 +1,21 @@
 package model;
 
+import java.util.Objects;
+
 public class ItemDaCena {
-    private int idItem;
+    private Integer id;
     private String nome;
     private String descricaoPositiva;
     private String descricaoNegativa;
     private String comandoCorreto;
-    private int idCenaAtual; 
-    private int idCenaDestino; 
-    private boolean interagivel; 
+    private Integer idCenaAtual;
+    private Integer idCenaDestino;
+    private Boolean interagivel;
 
-    public ItemDaCena(int idItem, String nome, String descricaoPositiva, String descricaoNegativa,String comandoCorreto, int idCenaAtual, int idCenaDestino, boolean interagivel) {
-        this.idItem = idItem;
+    public ItemDaCena(Integer id, String nome, String descricaoPositiva, String descricaoNegativa, 
+                      String comandoCorreto, Integer idCenaAtual, Integer idCenaDestino, 
+                      Boolean interagivel) {
+        this.id = id;
         this.nome = nome;
         this.descricaoPositiva = descricaoPositiva;
         this.descricaoNegativa = descricaoNegativa;
@@ -21,74 +25,34 @@ public class ItemDaCena {
         this.interagivel = interagivel;
     }
 
-    public int getIdItem() {
-        return idItem;
-    }
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
 
-    public void setIdItem(int idItem) {
-        this.idItem = idItem;
-    }
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
 
-    public String getNome() {
-        return nome;
-    }
+    public String getDescricaoPositiva() { return descricaoPositiva; }
+    public void setDescricaoPositiva(String descricaoPositiva) { this.descricaoPositiva = descricaoPositiva; }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+    public String getDescricaoNegativa() { return descricaoNegativa; }
+    public void setDescricaoNegativa(String descricaoNegativa) { this.descricaoNegativa = descricaoNegativa; }
 
-    public String getDescricaoPositiva() {
-        return descricaoPositiva;
-    }
+    public String getComandoCorreto() { return comandoCorreto; }
+    public void setComandoCorreto(String comandoCorreto) { this.comandoCorreto = comandoCorreto; }
 
-    public void setDescricaoPositiva(String descricaoPositiva) {
-        this.descricaoPositiva = descricaoPositiva;
-    }
+    public Integer getIdCenaAtual() { return idCenaAtual; }
+    public void setIdCenaAtual(Integer idCenaAtual) { this.idCenaAtual = idCenaAtual; }
 
-    public String getDescricaoNegativa() {
-        return descricaoNegativa;
-    }
+    public Integer getIdCenaDestino() { return idCenaDestino; }
+    public void setIdCenaDestino(Integer idCenaDestino) { this.idCenaDestino = idCenaDestino; }
 
-    public void setDescricaoNegativa(String descricaoNegativa) {
-        this.descricaoNegativa = descricaoNegativa;
-    }
-
-    public String getComandoCorreto() {
-        return comandoCorreto;
-    }
-
-    public void setComandoCorreto(String comandoCorreto) {
-        this.comandoCorreto = comandoCorreto;
-    }
-
-    public int getIdCenaAtual() {
-        return idCenaAtual;
-    }
-
-    public void setIdCenaAtual(int idCenaAtual) {
-        this.idCenaAtual = idCenaAtual;
-    }
-
-    public int getIdCenaDestino() {
-        return idCenaDestino;
-    }
-
-    public void setIdCenaDestino(int idCenaDestino) {
-        this.idCenaDestino = idCenaDestino;
-    }
-
-    public boolean isInteragivel() {
-        return interagivel;
-    }
-
-    public void setInteragivel(boolean interagivel) {
-        this.interagivel = interagivel;
-    }
+    public Boolean getInteragivel() { return interagivel; }
+    public void setInteragivel(Boolean interagivel) { this.interagivel = interagivel; }
 
     @Override
     public String toString() {
         return "ItemDaCena{" +
-                "idItem=" + idItem +
+                "id=" + id +
                 ", nome='" + nome + '\'' +
                 ", descricaoPositiva='" + descricaoPositiva + '\'' +
                 ", descricaoNegativa='" + descricaoNegativa + '\'' +
@@ -97,5 +61,18 @@ public class ItemDaCena {
                 ", idCenaDestino=" + idCenaDestino +
                 ", interagivel=" + interagivel +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ItemDaCena)) return false;
+        ItemDaCena that = (ItemDaCena) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

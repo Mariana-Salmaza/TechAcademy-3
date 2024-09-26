@@ -1,24 +1,17 @@
 package model;
 
 public class UseWith {
-    private int id;
     private int idItemInventario;
     private int idItemCena;
-    private String descricaoAcao;
 
-    public UseWith(int id, int idItemInventario, int idItemCena, String descricaoAcao) {
-        this.id = id;
+    public UseWith() {}
+
+    public UseWith(int idItemInventario, int idItemCena) {
+        if (idItemInventario <= 0 || idItemCena <= 0) {
+            throw new IllegalArgumentException("Os IDs dos itens devem ser maiores que zero.");
+        }
         this.idItemInventario = idItemInventario;
         this.idItemCena = idItemCena;
-        this.descricaoAcao = descricaoAcao;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getIdItemInventario() {
@@ -26,6 +19,9 @@ public class UseWith {
     }
 
     public void setIdItemInventario(int idItemInventario) {
+        if (idItemInventario <= 0) {
+            throw new IllegalArgumentException("O ID do item do inventário deve ser maior que zero.");
+        }
         this.idItemInventario = idItemInventario;
     }
 
@@ -34,14 +30,9 @@ public class UseWith {
     }
 
     public void setIdItemCena(int idItemCena) {
+        if (idItemCena <= 0) {
+            throw new IllegalArgumentException("O ID do item da cena deve ser maior que zero.");
+        }
         this.idItemCena = idItemCena;
-    }
-
-    public String getDescricaoAcao() {
-        return descricaoAcao;
-    }
-
-    public void setDescricaoAcao(String descricaoAcao) {
-        this.descricaoAcao = descricaoAcao;
     }
 }

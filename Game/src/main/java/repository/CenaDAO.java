@@ -5,9 +5,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Statement;
 
 public class CenaDAO {
     private final Connection connection;
@@ -16,7 +16,7 @@ public class CenaDAO {
         this.connection = connection;
     }
 
-    public Cena findCenaById(Integer id) throws SQLException {
+    public Cena getCenaPorId(Integer id) throws SQLException {
         Cena cena = null;
         String sql = "SELECT * FROM cenas WHERE id = ?";
 
@@ -25,9 +25,10 @@ public class CenaDAO {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                cena = new Cena();
-                cena.setId(rs.getInt("id"));
-                cena.setDescricao(rs.getString("descricao"));
+                cena = new Cena(
+                    rs.getInt("id"),
+                    rs.getString("descricao")
+                );
             }
         } catch (SQLException e) {
             throw new SQLException("Erro ao buscar Cena com ID " + id + ": " + e.getMessage(), e);
@@ -37,7 +38,7 @@ public class CenaDAO {
     }
 
     public int insertCena(Cena cena) throws SQLException {
-        String insert = "INSERT INTO cenas(descricao) VALUES (?);";
+        String insert = "INSERT INTO cenas(descricao) VALUES (?);"; // Somente a coluna descrição
         int generatedId = -1;
 
         try (PreparedStatement ps = connection.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)) {
@@ -64,9 +65,10 @@ public class CenaDAO {
              ResultSet resultSet = ps.executeQuery()) {
 
             while (resultSet.next()) {
-                Cena cena = new Cena();
-                cena.setId(resultSet.getInt("id"));
-                cena.setDescricao(resultSet.getString("descricao"));
+                Cena cena = new Cena(
+                    resultSet.getInt("id"),
+                    resultSet.getString("descricao")
+                );
                 cenas.add(cena);
             }
         } catch (SQLException e) {
@@ -77,6 +79,6 @@ public class CenaDAO {
     }
 
     public Cena getCenaInicial() throws SQLException {
-        return findCenaById(1);
+        return getCenaPorId(1);
     }
 }
