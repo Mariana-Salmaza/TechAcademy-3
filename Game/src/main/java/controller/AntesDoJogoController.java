@@ -1,31 +1,63 @@
 package controller;
 
 import com.google.gson.Gson;
-import model.Console;
-import service.ComandoService;
+import model.ItemDaCena;
+import repository.ItemDaCenaDAO;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
 
-public class AntesDoJogoController implements Route {
-    private final Gson gson;
-    public AntesDoJogoController(Gson gson) {
-        this.gson = gson;
+public class AntesDoJogoController {
+    private ItemDaCenaDAO itemDaCenaDAO = null;
+    private Gson gson = new Gson();
+
+    public AntesDoJogoController(Connection connection) {
+        this.itemDaCenaDAO = new ItemDaCenaDAO(connection);
     }
 
-    @Override
-    public Object handle(Request request, Response response) throws Exception {
-        //Recebe um parâmetro da URI e guarda em uma variável
-        String comandoBruto = request.params(":comando");
+    public Route adicionarItem = (Request req, Response res) -> {
+        try {
+            int idItem = Integer.parseInt(req.queryParams("idItem"));
+            String nome = req.queryParams("nome");
+            String descricaoPositiva = req.queryParams("descricao_positiva");
+            String descricaoNegativa = req.queryParams("descricao_negativa");
+            String comandoCorreto = req.queryParams("comando_correto");
+            int idCenaAtual = Integer.parseInt(req.queryParams("id_cena_atual"));
+            int idCenaDestino = Integer.parseInt(req.queryParams("id_cena_destino"));
+            boolean interagivel = Boolean.parseBoolean(req.queryParams("interagivel"));
 
-        //Instancia comando service passando o comando bruto como parâmetro do construtor.
-        ComandoService comandoService = new ComandoService(comandoBruto);
+            ItemDaCena item = new ItemDaCena(idItem, nome, descricaoPositiva, descricaoNegativa, comandoCorreto, idCenaAtual, idCenaDestino, interagivel);
 
-        //O método getResultadoConsole retorna uma instância da classe Console.
-        Console console = comandoService.getResultadoConsole();
+            itemDaCenaDAO.inserirItemDaCena(item);
+            res.status(201); // Created
+            return "Item inserido com sucesso!";
+        } catch (SQLException e) {
+            res.status(500); // Internal Server Error
+            return "Erro ao inserir item: " + e.getMessage();
+        } catch (NumberFormatException e) {
+            res.status(400); // Bad Request
+            return "Erro: parâmetros inválidos.";
+        }
+    };
 
-        //Retornamos o objeto console convertido para Json.
-        return gson.toJson(console);
-    }
+    public Route listarItensDaCena = (Request req, Response res) -> {
+        int idCena = Integer.parseInt(req.queryParams("id_cena"));
+        List<ItemDaCena> itens;
+
+        try {
+            itens = itemDaCenaDAO.listarItensDaCenaPorId(idCena);
+            res.type("application/json");
+            return gson.toJson(itens);
+        } catch (SQLException e) {
+            res.status(500);
+            return "Erro ao listar itens: " + e.getMessage();
+        } catch (NumberFormatException e) {
+            res.status(400); // Bad Request
+            return "Erro: parâmetros inválidos.";
+        }
+    };
 }

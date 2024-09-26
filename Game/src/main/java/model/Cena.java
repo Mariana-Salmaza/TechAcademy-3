@@ -1,18 +1,24 @@
 package model;
 
-import java.util.List;
-
 public class Cena {
-    private Integer idCena;
-    private String descricao;
-    private List<Item> itens;
+    private int id;
+    private String descricao; // Mantém apenas a descrição
 
-    public Integer getIdCena() {
-        return idCena;
+    // Construtor
+    public Cena(int id, String descricao) {
+        this.id = id;
+        this.descricao = descricao;
     }
 
-    public void setIdCena(Integer id) {
-        this.idCena = id;
+    // Construtor padrão
+    public Cena() {}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getDescricao() {
@@ -21,22 +27,5 @@ public class Cena {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
-    }
-
-    public List<Item> getItens() {
-        return itens;
-    }
-
-    public void setItens(List<Item> itens) {
-        this.itens = itens;
-    }
-
-    @Override
-    public String toString() {
-        return "Cena{" +
-                "id=" + idCena +
-                ", descricao='" + descricao + '\'' +
-                ", itens=" + itens +
-                '}';
     }
 }

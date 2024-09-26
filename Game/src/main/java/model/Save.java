@@ -1,29 +1,38 @@
 package model;
 
 public class Save {
-    private int idSave;
-    private Cena cenaAtual; 
+    private int id;
+    private int idCenaAtual; // Referência direta à cena atual como ID (inteiro)
 
-    public int getIdSave() {
-        return idSave;
+    public Save() {} // Construtor padrão
+
+    public Save(int id, int idCenaAtual) {
+        this.id = id;
+        this.idCenaAtual = idCenaAtual;
     }
 
-    public void setIdSave(int idSave) {
-        this.idSave = idSave;
+    // Getters e Setters
+    public int getId() {
+        return id;
     }
 
-    public Cena getCenaAtual() {
-        return cenaAtual;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setCenaAtual(Cena cenaAtual) {
-        this.cenaAtual = cenaAtual;
+    public int getIdCenaAtual() {
+        return idCenaAtual;
+    }
+
+    public void setIdCenaAtual(int idCenaAtual) {
+        this.idCenaAtual = idCenaAtual;
     }
 
     @Override
     public String toString() {
-        return "Save [idSave=" + idSave + ", cenaAtual=" + cenaAtual + "]";
+        return "Save{" +
+                "id=" + id +
+                ", idCenaAtual=" + idCenaAtual +
+                '}';
     }
-    
-    
 }

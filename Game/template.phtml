@@ -3,21 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Titulo da Página</title>
+    <title>Título da Página</title>
 </head>
 <body>
     <main>
         <div class="console-box">
-                <p><?= $arrayAssociativo->mensagem ?></p>
+            <p><?= isset($arrayAssociativo['mensagem']) ? htmlspecialchars($arrayAssociativo['mensagem']) : 'Nenhuma mensagem disponível.' ?></p>
         </div>
         <div class="form-group">
             <form>
-                <input type="text" name="comando"/>
-                <input type="text" name="save" value="<?= $arrayAssociativo->idSave ?>" readonly/>
-                <input type="submit"/>
+                <label for="comando">Comando:</label>
+                <input type="text" name="comando" id="comando" required />
+                
+                <label for="save">Salvar ID:</label>
+                <input type="text" name="save" id="save" value="<?= htmlspecialchars($arrayAssociativo['idSave'] ?? '') ?>" readonly />
+                
+                <input type="submit" value="Enviar" />
             </form>
         </div>
     </main>
-    
 </body>
 </html>
