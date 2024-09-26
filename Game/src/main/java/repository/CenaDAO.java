@@ -7,17 +7,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Statement; // Importação correta
+import java.sql.Statement;
 
 public class CenaDAO {
-    private final Connection connection; // Conexão inicializada via construtor
+    private final Connection connection;
 
     public CenaDAO(Connection connection) {
-        this.connection = connection; // Inicializa a conexão
+        this.connection = connection;
     }
 
     public Cena findCenaById(Integer id) throws SQLException {
-        Cena cena = null; // Inicializa como null
+        Cena cena = null;
         String sql = "SELECT * FROM cenas WHERE id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -27,7 +27,7 @@ public class CenaDAO {
             if (rs.next()) {
                 cena = new Cena();
                 cena.setId(rs.getInt("id"));
-                cena.setDescricao(rs.getString("descricao")); // Mantém apenas a descrição
+                cena.setDescricao(rs.getString("descricao"));
             }
         } catch (SQLException e) {
             throw new SQLException("Erro ao buscar Cena com ID " + id + ": " + e.getMessage(), e);
@@ -37,24 +37,23 @@ public class CenaDAO {
     }
 
     public int insertCena(Cena cena) throws SQLException {
-        String insert = "INSERT INTO cenas(descricao) VALUES (?);"; // Mantém apenas a descrição
-        int generatedId = -1; // Inicializa o ID gerado
+        String insert = "INSERT INTO cenas(descricao) VALUES (?);";
+        int generatedId = -1;
 
         try (PreparedStatement ps = connection.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setString(1, cena.getDescricao()); // Define a descrição
+            ps.setString(1, cena.getDescricao());
             ps.executeUpdate();
 
-            // Obtém a chave gerada automaticamente
             try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    generatedId = generatedKeys.getInt(1); // Define o id gerado
+                    generatedId = generatedKeys.getInt(1);
                 }
             }
         } catch (SQLException e) {
             throw new SQLException("Erro ao inserir Cena: " + e.getMessage(), e);
         }
         
-        return generatedId; // Retorna o ID gerado
+        return generatedId;
     }
     
     public List<Cena> findAll() throws SQLException {
@@ -67,7 +66,7 @@ public class CenaDAO {
             while (resultSet.next()) {
                 Cena cena = new Cena();
                 cena.setId(resultSet.getInt("id"));
-                cena.setDescricao(resultSet.getString("descricao")); // Mantém apenas a descrição
+                cena.setDescricao(resultSet.getString("descricao"));
                 cenas.add(cena);
             }
         } catch (SQLException e) {
@@ -77,8 +76,7 @@ public class CenaDAO {
         return cenas;
     }
 
-    // Método para obter a cena inicial (se necessário)
     public Cena getCenaInicial() throws SQLException {
-        return findCenaById(1); // Supondo que a cena inicial tenha o ID 1
+        return findCenaById(1);
     }
 }

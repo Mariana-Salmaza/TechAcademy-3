@@ -11,22 +11,20 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        // Configuração da conexão com o banco de dados
-        String url = "jdbc:mysql://localhost:3306/game"; // Altere para o URL do seu banco de dados
-        String user = "root"; // Altere para seu usuário
-        String password = ""; // Altere para sua senha
+
+        String url = "jdbc:mysql://localhost:3306/game";
+        String user = "root";
+        String password = "";
 
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
-            // Inicializando os DAOs com a conexão
+    
             ItemInventarioDAO itemInventarioDAO = new ItemInventarioDAO(connection);
             ItemDaCenaDAO itemDaCenaDAO = new ItemDaCenaDAO(connection);
             CenaDAO cenaDAO = new CenaDAO(connection);
             SaveDAO saveDAO = new SaveDAO(connection);
 
-            // Inicializando o ComandoService com os DAOs
             ComandoService comandoService = new ComandoService(itemInventarioDAO, itemDaCenaDAO, cenaDAO, saveDAO);
-
-            // Iniciar o jogo
+            
             comandoService.start();
 
             Scanner scanner = new Scanner(System.in);

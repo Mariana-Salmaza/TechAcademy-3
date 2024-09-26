@@ -13,7 +13,6 @@ public class UseWith {
         this.descricaoAcao = descricaoAcao;
     }
 
-    // Getters e Setters
     public int getId() {
         return id;
     }

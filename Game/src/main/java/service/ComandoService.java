@@ -23,25 +23,23 @@ public class ComandoService {
         this.itemDaCenaDAO = itemDaCenaDAO;
         this.cenaDAO = cenaDAO;
         this.saveDAO = saveDAO;
-        this.idCenaAtual = 1; // Começa na cena 1 por padrão
+        this.idCenaAtual = 1;
     }
 
-    // Método para iniciar o jogo
     public void start() throws SQLException {
-        // Carregar a cena inicial
-        Cena cenaInicial = cenaDAO.getCenaInicial(); // Método para obter a cena inicial
+    
+        Cena cenaInicial = cenaDAO.getCenaInicial();
         if (cenaInicial != null) {
-            idCenaAtual = cenaInicial.getId(); // Definindo o idCenaAtual com a cena inicial
+            idCenaAtual = cenaInicial.getId();
             System.out.println("Bem-vindo ao jogo!");
             System.out.println("Você está na cena: " + cenaInicial.getDescricao());
-            System.out.println(cenaInicial.getDescricao()); // Exibindo a descrição da cena
-            exibirCenaAtual(); // Exibe a cena inicial
+            System.out.println(cenaInicial.getDescricao()); 
+            exibirCenaAtual();
         } else {
             System.out.println("Erro ao carregar a cena inicial.");
         }
     }
 
-    // Exibe a cena atual
     private void exibirCenaAtual() {
         try {
             Cena cena = cenaDAO.findCenaById(idCenaAtual);
@@ -56,7 +54,6 @@ public class ComandoService {
         }
     }
 
-    // Lista os itens da cena atual
     private void listarItensDaCena() {
         try {
             List<ItemDaCena> itens = itemDaCenaDAO.listarItensDaCenaPorId(idCenaAtual);
@@ -75,7 +72,7 @@ public class ComandoService {
 
     // HELP
     public String help() {
-        // Retorna uma string com a lista de comandos
+
         return "Comandos disponíveis:\n" +
                 "/start - Inicia o jogo.\n" +
                 "/help - Exibe esta lista de comandos.\n" +
@@ -86,7 +83,6 @@ public class ComandoService {
                 "/restart - Reinicia o jogo.\n";
     }
 
-    // Pega um item da cena e adiciona ao inventário
     public void pegarItem(String itemNome) {
         try {
             List<ItemDaCena> itensCena = itemDaCenaDAO.listarItensDaCenaPorId(idCenaAtual);
@@ -135,7 +131,6 @@ public class ComandoService {
         }
     }
 
-    // Usa um item do inventário com um item da cena
     public void usarCom(String itemInventarioNome, String itemCenaNome) {
         try {
             ItemInventario itemInventario = itemInventarioDAO.buscarPorNome(itemInventarioNome);
@@ -168,7 +163,6 @@ public class ComandoService {
         }
     }
 
-    // Aplica os efeitos da interação entre itens
     private void aplicarEfeitos(ItemInventario itemInventario, ItemDaCena itemCena) {
         String efeito = "";
         int novaCenaId = -1;
@@ -189,13 +183,11 @@ public class ComandoService {
         }
     }
 
-    // Muda para uma nova cena
     private void mudarCena(int novaCenaId) {
         idCenaAtual = novaCenaId;
         exibirCenaAtual();
     }
 
-    // Exibe o inventário do jogador
     public void mostrarInventario() {
         try {
             List<ItemInventario> inventario = itemInventarioDAO.listarItensPorSave(idSave);
@@ -214,7 +206,7 @@ public class ComandoService {
 
     // RESTART
     public void restart() {
-        idCenaAtual = 1; // Ou outra lógica para reiniciar o jogo
+        idCenaAtual = 1;
         System.out.println("O jogo foi reiniciado.");
         exibirCenaAtual();
     }

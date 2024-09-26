@@ -15,7 +15,6 @@ public class ItemInventarioDAO {
         this.connection = connection;
     }
 
-    // Método para buscar todos os itens de um save específico
     public List<ItemInventario> buscarPorIdSave(Integer idSave) throws SQLException {
         List<ItemInventario> inventario = new ArrayList<>();
         String sql = "SELECT * FROM itens_inventario WHERE id_save = ?";
@@ -41,7 +40,6 @@ public class ItemInventarioDAO {
         return inventario;
     }
 
-    // Método para buscar um item pelo nome
     public ItemInventario buscarPorNome(String nome) throws SQLException {
         String sql = "SELECT * FROM itens_inventario WHERE nome_item = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -58,10 +56,9 @@ public class ItemInventarioDAO {
                 }
             }
         }
-        return null; // Retorna null se não encontrar
+        return null;
     }
 
-    // Método para adicionar um item ao inventário
     public void adicionarItem(ItemInventario item) throws SQLException {
         String sql = "INSERT INTO itens_inventario (nome_item, descricao_positiva, descricao_negativa, id_save) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -75,7 +72,6 @@ public class ItemInventarioDAO {
         }
     }
 
-    // Método para listar todos os itens no inventário
     public List<ItemInventario> listarTodos() throws SQLException {
         List<ItemInventario> inventario = new ArrayList<>();
         String sql = "SELECT * FROM itens_inventario";
@@ -97,7 +93,6 @@ public class ItemInventarioDAO {
     }
 
     public List<ItemInventario> listarItensPorSave(int idSave) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'listarItensPorSave'");
     }
 }

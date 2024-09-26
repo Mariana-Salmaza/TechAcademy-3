@@ -2,16 +2,15 @@ package model;
 
 public class Save {
     private int id;
-    private int idCenaAtual; // Referência direta à cena atual como ID (inteiro)
+    private int idCenaAtual;
 
-    public Save() {} // Construtor padrão
+    public Save() {}
 
     public Save(int id, int idCenaAtual) {
         this.id = id;
         this.idCenaAtual = idCenaAtual;
     }
 
-    // Getters e Setters
     public int getId() {
         return id;
     }

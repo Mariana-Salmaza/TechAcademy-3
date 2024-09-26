@@ -33,13 +33,13 @@ public class AntesDoJogoController {
             ItemDaCena item = new ItemDaCena(idItem, nome, descricaoPositiva, descricaoNegativa, comandoCorreto, idCenaAtual, idCenaDestino, interagivel);
 
             itemDaCenaDAO.inserirItemDaCena(item);
-            res.status(201); // Created
+            res.status(201);
             return "Item inserido com sucesso!";
         } catch (SQLException e) {
-            res.status(500); // Internal Server Error
+            res.status(500);
             return "Erro ao inserir item: " + e.getMessage();
         } catch (NumberFormatException e) {
-            res.status(400); // Bad Request
+            res.status(400);
             return "Erro: parâmetros inválidos.";
         }
     };
@@ -56,7 +56,7 @@ public class AntesDoJogoController {
             res.status(500);
             return "Erro ao listar itens: " + e.getMessage();
         } catch (NumberFormatException e) {
-            res.status(400); // Bad Request
+            res.status(400);
             return "Erro: parâmetros inválidos.";
         }
     };

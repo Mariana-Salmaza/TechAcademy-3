@@ -3,9 +3,9 @@ package model;
 public class ItemInventario {
     private Integer id;
     private String nome;
-    private String descricaoPositiva; // Para a descrição positiva do item
-    private String descricaoNegativa; // Para a descrição negativa do item
-    private Integer idSave; // Relaciona o item a um save específico
+    private String descricaoPositiva;
+    private String descricaoNegativa; 
+    private Integer idSave;
 
     public ItemInventario(Integer id, String nome, String descricaoPositiva, String descricaoNegativa, Integer idSave) {
         this.id = id;
@@ -15,7 +15,6 @@ public class ItemInventario {
         this.idSave = idSave;
     }
 
-    // Getters e Setters
     public Integer getId() {
         return id;
     }

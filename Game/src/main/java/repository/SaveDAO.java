@@ -19,7 +19,7 @@ public class SaveDAO {
             stmt.executeUpdate();
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    return generatedKeys.getInt(1); // Retorna o id gerado
+                    return generatedKeys.getInt(1);
                 } else {
                     throw new SQLException("Falha ao obter o ID do save.");
                 }

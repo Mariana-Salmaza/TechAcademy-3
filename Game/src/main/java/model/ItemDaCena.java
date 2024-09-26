@@ -1,14 +1,14 @@
 package model;
 
 public class ItemDaCena {
-    private int idItem; // Id do item
+    private int idItem;
     private String nome;
     private String descricaoPositiva;
     private String descricaoNegativa;
     private String comandoCorreto;
-    private int idCenaAtual; // Referência à cena atual
-    private int idCenaDestino; // Referência à cena destino
-    private boolean interagivel; // Se o item é interagível
+    private int idCenaAtual; 
+    private int idCenaDestino; 
+    private boolean interagivel; 
 
     public ItemDaCena(int idItem, String nome, String descricaoPositiva, String descricaoNegativa,String comandoCorreto, int idCenaAtual, int idCenaDestino, boolean interagivel) {
         this.idItem = idItem;
@@ -21,7 +21,6 @@ public class ItemDaCena {
         this.interagivel = interagivel;
     }
 
-    // Getters e Setters
     public int getIdItem() {
         return idItem;
     }
