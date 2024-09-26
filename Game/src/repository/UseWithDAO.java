@@ -30,7 +30,7 @@ public class UseWithDAO {
         }
     }
 
-    
+
     public List<UseWith> findActionsByItemId(int idItemInventario) throws SQLException {
         List<UseWith> useWithList = new ArrayList<>();
         String sql = "SELECT * FROM use_with WHERE id_item_inventario = ?";
@@ -52,7 +52,7 @@ public class UseWithDAO {
         }
         return useWithList;
     }
-    
+
 
     public void deletarUseWith(int idItemInventario, int idItemCena) throws SQLException {
         String sql = "DELETE FROM use_with WHERE id_item_inventario = ? AND id_item_cena = ?";

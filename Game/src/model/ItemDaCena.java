@@ -6,9 +6,9 @@ public class ItemDaCena {
     private String descricaoPositiva;
     private String descricaoNegativa;
     private String comandoCorreto;
-    private int idCenaAtual; 
-    private int idCenaDestino; 
-    private boolean interagivel; 
+    private int idCenaAtual;
+    private int idCenaDestino;
+    private boolean interagivel;
 
     public ItemDaCena(int idItem, String nome, String descricaoPositiva, String descricaoNegativa,String comandoCorreto, int idCenaAtual, int idCenaDestino, boolean interagivel) {
         this.idItem = idItem;

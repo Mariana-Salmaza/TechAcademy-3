@@ -74,7 +74,7 @@ public class ItemDaCenaDAO {
                 }
             }
         }
-        return null; 
+        return null;
     }
 
     public void atualizarItemDaCena(ItemDaCena item) throws SQLException {
@@ -107,7 +107,7 @@ public class ItemDaCenaDAO {
             pstmt.setInt(2, idItemCena);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    return rs.getInt(1) > 0; 
+                    return rs.getInt(1) > 0;
                 }
             }
         }

@@ -4,7 +4,7 @@ public class ItemInventario {
     private Integer id;
     private String nome;
     private String descricaoPositiva;
-    private String descricaoNegativa; 
+    private String descricaoNegativa;
     private Integer idSave;
 
     public ItemInventario(Integer id, String nome, String descricaoPositiva, String descricaoNegativa, Integer idSave) {

@@ -32,7 +32,7 @@ public class CenaDAO {
         } catch (SQLException e) {
             throw new SQLException("Erro ao buscar Cena com ID " + id + ": " + e.getMessage(), e);
         }
-        
+
         return cena;
     }
 
@@ -52,10 +52,10 @@ public class CenaDAO {
         } catch (SQLException e) {
             throw new SQLException("Erro ao inserir Cena: " + e.getMessage(), e);
         }
-        
+
         return generatedId;
     }
-    
+
     public List<Cena> findAll() throws SQLException {
         String sql = "SELECT * FROM cenas;";
         List<Cena> cenas = new ArrayList<>();
@@ -72,7 +72,7 @@ public class CenaDAO {
         } catch (SQLException e) {
             throw new SQLException("Erro ao buscar todas as Cenas: " + e.getMessage(), e);
         }
-        
+
         return cenas;
     }
 

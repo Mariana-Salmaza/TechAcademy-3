@@ -27,13 +27,13 @@ public class ComandoService {
     }
 
     public void start() throws SQLException {
-    
+
         Cena cenaInicial = cenaDAO.getCenaInicial();
         if (cenaInicial != null) {
             idCenaAtual = cenaInicial.getId();
             System.out.println("Bem-vindo ao jogo!");
             System.out.println("Você está na cena: " + cenaInicial.getDescricao());
-            System.out.println(cenaInicial.getDescricao()); 
+            System.out.println(cenaInicial.getDescricao());
             exibirCenaAtual();
         } else {
             System.out.println("Erro ao carregar a cena inicial.");

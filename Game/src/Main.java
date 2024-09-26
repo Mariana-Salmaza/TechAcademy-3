@@ -17,14 +17,14 @@ public class Main {
         String password = "";
 
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
-    
+
             ItemInventarioDAO itemInventarioDAO = new ItemInventarioDAO(connection);
             ItemDaCenaDAO itemDaCenaDAO = new ItemDaCenaDAO(connection);
             CenaDAO cenaDAO = new CenaDAO(connection);
             SaveDAO saveDAO = new SaveDAO(connection);
 
             ComandoService comandoService = new ComandoService(itemInventarioDAO, itemDaCenaDAO, cenaDAO, saveDAO);
-            
+
             comandoService.start();
 
             Scanner scanner = new Scanner(System.in);
@@ -35,7 +35,7 @@ public class Main {
             while (true) {
                 System.out.print("Digite um comando: ");
                 comando = scanner.nextLine().trim();
-            
+
                 switch (comando.toLowerCase()) {
                     case "/help":
                         System.out.println(comandoService.help());
